@@ -31,18 +31,45 @@ local levelTwo = grid.newGrid(levelSize.xSquares, levelSize.ySquares, levelSize.
 levelTwo:setLocation(levelSize.startX, levelSize.startY)
 levelTwo:hide()
 
+levelOne.coloradoStart = levelOne[0][0]
+levelOne.scorpionStart = levelOne[8][8]
+levelOne.goldStart = levelOne[9][8]
+
+levelTwo.coloradoStart = levelTwo[9][8]
+levelTwo.scorpionStart = levelTwo[3][0]
+levelTwo.goldStart = levelTwo[4][3]
+
+levelOne.nextLevel = levelTwo
+levelTwo.nextLevel = levelOne
+local currentLevel = levelOne
 
 local colorado = character.newCharacter("fedora.png")
-colorado:enter(levelOne[0][0])
+colorado:enter(currentLevel.coloradoStart)
 
 local gold = character.newCharacter("gold.png")
-gold:enter(levelOne[9][8])
+gold:enter(currentLevel.goldStart)
 
 
 local scorpion = character.newCharacter("scorpion.png")
-scorpion:enter(levelOne[8][8])
+scorpion:enter(currentLevel.scorpionStart)
+
+local getTheGold = function()
+	if colorado.gridSquare == gold.gridSquare then
+		local lastLevel = colorado.gridSquare.grid
+		currentLevel = lastLevel.nextLevel
+		colorado:enter(currentLevel.coloradoStart)
+		gold:enter(currentLevel.goldStart)
+		scorpion:enter(currentLevel.scorpionStart)
+		lastLevel:hide()
+		currentLevel:show()
+	end
+end
 
 local enemyTurn = function()
+	if math.random(0, 5) == 1 then
+		return
+	end
+
 	if scorpion.gridSquare.x > colorado.gridSquare.x then
 		scorpion:enter(scorpion.gridSquare:left())
 	elseif scorpion.gridSquare.x < colorado.gridSquare.x then
@@ -54,25 +81,30 @@ local enemyTurn = function()
 	end
 
 	if scorpion.gridSquare == colorado.gridSquare then
-		colorado:enter(levelOne[0][0])
-		scorpion:enter(levelOne[8][8])
+		colorado:enter(currentLevel.coloradoStart)
+		scorpion:enter(currentLevel.scorpionStart)
 	end
 end
 
+
 controls:whenUpPressed(function()
 	colorado:enter(colorado.gridSquare:above())
+	getTheGold()
 	enemyTurn()
 end)
 controls:whenDownPressed(function()
 	colorado:enter(colorado.gridSquare:below())
+	getTheGold()
 	enemyTurn()
 end)
 controls:whenLeftPressed(function()
 	colorado:enter(colorado.gridSquare:left())
+	getTheGold()
 	enemyTurn()
 end)
 controls:whenRightPressed(function()
 	colorado:enter(colorado.gridSquare:right())
+	getTheGold()
 	enemyTurn()
 end)
 
