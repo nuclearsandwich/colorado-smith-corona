@@ -3,15 +3,15 @@ local gridSquareFunctions = {
 		if gridSquare.x == 0 then
 			return gridSquare
 		else
-			return grid[gridSquare.y][gridSquare.x - 1]
+			return gridSquare.grid[gridSquare.y][gridSquare.x - 1]
 		end
 	end,
 
 	right = function(gridSquare)
-		if gridSquare.x + 1 == grid.xSquares then
+		if gridSquare.x + 1 == gridSquare.grid.xSquares then
 			return gridSquare
 		else
-			return grid[gridSquare.y][gridSquare.x + 1]
+			return gridSquare.grid[gridSquare.y][gridSquare.x + 1]
 		end
 	end,
 
@@ -19,15 +19,15 @@ local gridSquareFunctions = {
 		if gridSquare.y == 0 then
 			return gridSquare
 		else
-			return grid[gridSquare.y - 1][gridSquare.x]
+			return gridSquare.grid[gridSquare.y - 1][gridSquare.x]
 		end
 	end,
 
 	below = function(gridSquare)
-		if gridSquare.y + 1 == grid.ySquares then
+		if gridSquare.y + 1 == gridSquare.grid.ySquares then
 			return gridSquare
 		else
-			return grid[gridSquare.y + 1][gridSquare.x]
+			return gridSquare.grid[gridSquare.y + 1][gridSquare.x]
 		end
 	end,
 }
@@ -77,6 +77,7 @@ Grid.newGridSquare = function(grid, y, x)
 	gridSquare.right = gridSquareFunctions.right
 	gridSquare.above = gridSquareFunctions.above
 	gridSquare.below = gridSquareFunctions.below
+	gridSquare.grid = grid
 	return gridSquare
 end
 
@@ -99,6 +100,8 @@ Grid.newGrid = function(xSquares, ySquares, totalWidth)
 
 	grid.eachSquare = gridFunctions.eachSquare
 	grid.setLocation = gridFunctions.setLocation
+	grid.show = gridFunctions.show
+	grid.hide = gridFunctions.hide
 
 	return grid
 end

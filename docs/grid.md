@@ -102,7 +102,65 @@ grid[0][1].displayObject:setFillColor(0, 0, 255, 255)
 
 ### Setting the grid's location
 
+		grid:setLocation(x, y)
+
+#### Parameters
+
+* `x` The x display pixel coordinate of the top left corner of the grid
+* `y` The y display pixel coordinate of the top left corner of the grid
+
+#### Examples
+
+###### Apply a top and left margin to the grid
+
+```lua
+local myGrid = grid.newGrid(5, 5, 500)
+local topMargin = 100
+local leftMargin = 80
+myGrid:setLocation(leftMargin, topMargin)
+```
+
 ### Iterating over all grid squares
+
+		grid:eachSquare(doEach)
+
+#### Parameters
+
+* `doEach` A *function* with a single parameter that will be run on each
+individual square.
+
+#### Examples
+
+###### Checkerboard
+
+```lua
+local checkerboard = grid.newGrid(8, 8, 700)
+checkerboard:eachSquare(function(gridSquare)
+	-- Tests if the square is "even".
+	if (gridSquare.x + gridSquare.y) % 2 == 0 then
+		gridSquare.displayObject:setFillColor(255, 255, 255, 255)
+	else
+		gridSquare.displayObject:setFillColor(0, 0, 0, 255)
+	end
+end)
+```
+
+###### Add an event listener for touches on each square
+
+```lua
+myGrid = grid.newGrid(5, 5, 500)
+local addTouchListener = function(gridSquare)
+	local touch = function
+		if event.phase == "began" then
+			print("Touched square at x: " .. gridSquare.x .. " y: " .. gridSquare.y)
+		end
+	end
+
+	gridSquare.displayObject:addEventListener("touch", touch)
+end
+
+myGrid:eachSquare(addTouchListener)
+```
 
 ### Showing and hiding the grid
 
@@ -151,6 +209,7 @@ if player.gridSquare == levelone.finish
 * `x`
 * `y`
 * `displayObject`
+* `grid`
 
 ### Methods
 

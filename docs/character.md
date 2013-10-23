@@ -26,7 +26,7 @@ Creates a new character from an image name for use on a grid.
 #### Parameters
 
 * __imageName__ The name of the image to use for the character's on screen
-	representationo
+	representation.
 
 #### Examples
 
